@@ -43,10 +43,10 @@
 			var format = "00"
 			
 			function triggerAlarm() {
-				alert("ALARM");
-				clearInterval(interval);
 				intervalSet = false;
-				$(".timer").val("05:00")
+				clearInterval(interval);
+				var audio = $("audio")[0];
+				audio.play();
 			}
 
 			function reduceNumericArray(arr, lenMinus){
@@ -57,27 +57,35 @@
 					} else {
 						arr[arr.length - lenMinus] = 59
 						reduceNumericArray(arr, lenMinus + 1);
-						return arr;
+						if (intervalSet){
+							return arr;
+						} else {
+							return [5, 0];
+						}
+						
 					}
 				} else {
+					intervalSet = false;
 					triggerAlarm();	
 				}
 			};
 
 			function startTimer(){
-				var timeArray = $(".timer").val().split(":");
-				for(var i = 0; i < timeArray.length; i++) { 
-					timeArray[i] = +timeArray[i]; 
-				}
-				
-				timeArray = reduceNumericArray(timeArray, 1);
-				var strArray = [];
-				
-				for(var i = 0; i < timeArray.length; i++) { 
-					strArray.push(format.substring(("" + timeArray[i]).length, 2) + (timeArray[i] + "")); 
-				}
-				
-				$(".timer").val(strArray.join(":"));
+				if (intervalSet) {
+					var timeArray = $(".timer").val().split(":");
+					for(var i = 0; i < timeArray.length; i++) { 
+						timeArray[i] = +timeArray[i]; 
+					}
+					
+					timeArray = reduceNumericArray(timeArray, 1);
+					var strArray = [];
+					
+					for(var i = 0; i < timeArray.length; i++) { 
+						strArray.push(format.substring(("" + timeArray[i]).length, 2) + (timeArray[i] + "")); 
+					}
+					
+					$(".timer").val(strArray.join(":"));
+				}			
 			};
 					
 			$(document).ready(function () {
@@ -95,7 +103,6 @@
 				});
 				
 				$(".timer").focus(function() {
-					document.body.requestFullscreen();
 					if (intervalSet){
 						clearInterval(interval);
 						intervalSet = false;
@@ -106,7 +113,11 @@
 	</head>
 	<body>
 	  <div class="content">
-		<input type="text" inputmode="numeric" class="timer" value="05:00">
+		<input type="text" class="timer" value="05:00">
 	  </div>
+	  <audio>
+		<source src="resources/alarm.mp3"  type="audio/mpeg">
+	  </audio>
+	  
 	</body>
 </html>

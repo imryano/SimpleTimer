@@ -18,6 +18,5 @@
   </author>
 
   <preference name="Fullscreen" value="true" /> 
-  <gap:plugin name="org.apache.cordova.media" />
   <preference name="StatusBarOverlaysWebView" value="true" />
 </widget>

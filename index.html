@@ -41,7 +41,7 @@
 			var interval;
 			var intervalSet = false;
 			var format = "00";
-			var initialValue = [];
+			var initialValue;
 			
 			function playAudio(id) {
 				var audioElement = document.getElementById(id);
@@ -111,8 +111,8 @@
 				$(".timer").blur(function() {
 					if ($(this).val().trim() != "" && !intervalSet){						
 						initialValue = $(".timer").val().split(":");
-						for(var i = 0; i < initialValue.length; i++) { 
-							initialValue[i] = +initialValue[i]; 
+						for(var j = 0; j < initialValue.length; j++) { 
+							initialValue[j] = +initialValue[j]; 
 						}
 						
 						interval = setInterval(startTimer, 1000);

@@ -41,12 +41,25 @@
 			var interval;
 			var intervalSet = false;
 			var format = "00"
+			var initialValue;
+			
+			function playAudio(id) {
+				var audioElement = document.getElementById(id);
+				var url = audioElement.getAttribute('src');
+				var my_media = new Media(url,
+						// success callback
+						 function () { console.log("playAudio():Audio Success"); },
+						// error callback
+						 function (err) { console.log("playAudio():Audio Error: " + err); }
+				);
+					   // Play audio
+				my_media.play();
+			}
 			
 			function triggerAlarm() {
 				intervalSet = false;
 				clearInterval(interval);
-				var audio = $("audio")[0];
-				audio.play();
+				playAudio("alarmSound");
 			}
 
 			function reduceNumericArray(arr, lenMinus){
@@ -60,7 +73,7 @@
 						if (intervalSet){
 							return arr;
 						} else {
-							return [5, 0];
+							return initialValue;
 						}
 						
 					}
@@ -96,7 +109,12 @@
 				}
 			});
 				$(".timer").blur(function() {
-					if ($(this).val().trim() != "" && !intervalSet){
+					if ($(this).val().trim() != "" && !intervalSet){						
+						initialValue = $(".timer").val().split(":");
+						for(var i = 0; i < initialValue.length; i++) { 
+							initialValue[i] = +initialValue[i]; 
+						}
+						
 						interval = setInterval(startTimer, 1000);
 						intervalSet = true;
 					}
@@ -115,7 +133,7 @@
 	  <div class="content">
 		<input type="text" class="timer" value="05:00">
 	  </div>
-	  <audio>
+	  <audio id="alarmSound">
 		<source src="resources/alarm.mp3"  type="audio/mpeg">
 	  </audio>
 	  
